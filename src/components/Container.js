@@ -6,9 +6,9 @@ import { ANDis } from "./ANDis.js";
 export const Container = memo(function Container() {
   const [clientList, setClientList] = useState("");
 
-  // const handleClientListState = (client) => {
-  //   setClientList(client);
-  // };
+  const handleClientListState = (client) => {
+    setClientList(client);
+  };
 
   return (
     <div>

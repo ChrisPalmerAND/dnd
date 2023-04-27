@@ -16,7 +16,7 @@ const style = {
 };
 
 const listAndis = ["Chris", "Dom", "KZ"];
-export const ANDis = (onChangeClientList) => {
+export const ANDis = ({ onChangeClientList }) => {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: () => ({ name: "ANDis" }),
