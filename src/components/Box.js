@@ -16,10 +16,11 @@ export const Box = function Box({ name, onChangeClientList }) {
     item: { name },
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
-      if (item && dropResult) {
+      if (item) {
         console.log(`You dropped ${item.name} into ${dropResult.name}!`);
+        onChangeClientList(item.name, dropResult.name);
+        // should change this to pass in the item name and the drop result name
       }
-      onChangeClientList(item.name);
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),

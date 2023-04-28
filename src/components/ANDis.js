@@ -15,8 +15,7 @@ const style = {
   float: "left",
 };
 
-const listAndis = ["Chris", "Dom", "KZ"];
-export const ANDis = ({ onChangeClientList }) => {
+export const ANDis = ({ onChangeClientList, listOfAndis }) => {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: () => ({ name: "ANDis" }),
@@ -40,9 +39,14 @@ export const ANDis = ({ onChangeClientList }) => {
         data-testid="dustbin"
       >
         <h1>ANDis</h1>
-        {listAndis.map((name) => {
-          return <Box name={name} onChangeClientList={onChangeClientList} />;
-        })}
+        {listOfAndis &&
+          listOfAndis.map((name) => {
+            if (name.currentProject === "ANDis") {
+              return (
+                <Box name={name.name} onChangeClientList={onChangeClientList} />
+              );
+            }
+          })}
       </div>
     </>
   );
