@@ -13,8 +13,8 @@ export const Container = memo(function Container() {
     {
       name: "Dom",
       id: 2,
-      currentProject: "Lab",
-      client: { status: "tipped", name: "Sky" },
+      currentProject: "Sky",
+      client: { status: "confirmed", name: "Sky" },
     }, // change "tipped" for enum types.
     {
       name: "KZ",

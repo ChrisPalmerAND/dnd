@@ -46,22 +46,13 @@ export const WorkSource = ({
         <p>{nameOfWorkSource}</p>
         {andiList &&
           andiList.map((andi) => {
-            if (andi.client) {
-              console.log(andi);
-              console.log(andi.client);
-              console.log(andi.client.status === "tipped");
-              console.log(nameOfWorkSource === andi.client.name);
-            }
             const isTippedForClient =
-              andi.client &&
-              andi.client.status === "tipped" &&
-              nameOfWorkSource === andi.client.name;
+              andi.client && andi.client.status === "tipped";
 
             const isRollingOff =
-              andi.client &&
-              andi.client.status === "rolling off" &&
-              nameOfWorkSource === "Lab";
+              andi.client && andi.client.status === "rolling off";
 
+            console.log("line 55", andi.currentProject, nameOfWorkSource);
             if (andi.currentProject === nameOfWorkSource) {
               return (
                 <Box
@@ -75,37 +66,34 @@ export const WorkSource = ({
             }
           })}
       </div>
-      {/* <div>
+      <div>
         {andiList &&
           andiList.map((andi) => {
-            if (andi.client) {
-              console.log("line 64", andi.client.name);
-            }
             const isTippedForClient =
-              andi.client &&
-              andi.client.status === "tipped" &&
-              nameOfWorkSource === andi.client.name;
+              andi.client && andi.client.status === "tipped";
 
             const isRollingOff =
-              andi.client &&
-              andi.client.status === "rolling off" &&
-              nameOfWorkSource === "Lab";
+              andi.client && andi.client.status === "rolling off";
 
-            console.log(andi.name, isTippedForClient, isRollingOff);
+            const isShadowBox =
+              isTippedForClient && nameOfWorkSource === andi.client?.name
+                ? true
+                : isRollingOff && nameOfWorkSource === "Lab"
+                ? true
+                : false;
 
-            {
-              return (
-                <Box
-                  andi={andi}
-                  onChangeClientList={onChangeClientList}
-                  worksource={nameOfWorkSource}
-                  isTipped={isTippedForClient}
-                  isRollingOff={isRollingOff}
-                />
-              );
-            }
+            return isShadowBox ? (
+              <Box
+                andi={andi}
+                onChangeClientList={onChangeClientList}
+                worksource={nameOfWorkSource}
+                isShadowBox={isShadowBox}
+              />
+            ) : (
+              ""
+            );
           })}
-      </div> */}
+      </div>
     </div>
   );
 };

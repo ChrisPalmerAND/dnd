@@ -30,6 +30,7 @@ export const Box = function Box({
   worksource,
   isTipped,
   isRollingOff,
+  isShadowBox,
 }) {
   const name = andi.name;
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -51,11 +52,9 @@ export const Box = function Box({
   return (
     <>
       <div
-        ref={isTipped || isRollingOff ? null : drag}
+        ref={isShadowBox ? null : drag}
         style={
-          isTipped || isRollingOff
-            ? { ...shadowStyle, opacity }
-            : { ...style, opacity }
+          isShadowBox ? { ...shadowStyle, opacity } : { ...style, opacity }
         }
         data-testid={`box`}
       >
