@@ -40,10 +40,10 @@ export const ANDis = ({ onChangeClientList, listOfAndis }) => {
       >
         <h1>ANDis</h1>
         {listOfAndis &&
-          listOfAndis.map((name) => {
-            if (name.currentProject === "ANDis") {
+          listOfAndis.map((andi) => {
+            if (andi.currentProject === "ANDis") {
               return (
-                <Box name={name.name} onChangeClientList={onChangeClientList} />
+                <Box name={andi.name} onChangeClientList={onChangeClientList} />
               );
             }
           })}

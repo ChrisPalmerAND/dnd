@@ -4,42 +4,54 @@ import { WorkSource } from "./WorkSource.js";
 export const Container = memo(function Container() {
   const [clientList, setClientList] = useState([]);
   const [andiList, setAndiList] = useState([
-    { name: "Chris", id: 1, currentProject: "ANDis" },
-    { name: "Dom", id: 2, currentProject: "Lab" },
-    { name: "KZ", id: 3, currentProject: "ANDis" },
+    {
+      name: "Chris",
+      id: 1,
+      currentProject: "Lab",
+      client: { status: "tipped", name: "M&M" },
+    },
+    {
+      name: "Dom",
+      id: 2,
+      currentProject: "Lab",
+      client: { status: "tipped", name: "Sky" },
+    }, // change "tipped" for enum types.
+    {
+      name: "KZ",
+      id: 3,
+      currentProject: "TCO",
+      client: { status: "rolling off", name: "TCO" },
+    },
+    {
+      name: "Iain",
+      id: 4,
+      currentProject: "Lab",
+      client: null,
+    },
   ]);
 
   const handleClientListState = (client, targetName) => {
-    console.log("Triggered");
-    setAndiList((prev) => {
+    setAndiList((prev) =>
       prev.map((andi) => {
         if (andi.name === client) {
           andi.currentProject = targetName;
-          console.log("state loops", andi);
         }
-        return [...prev, prev];
-      });
-    });
-    console.log("post function andi list", andiList);
+        return andi;
+      })
+    );
   };
 
   const listOfWorkSource = ["Lab", "Sky", "TCO", "M&M"];
 
   return (
     <div>
-      <div style={{ overflow: "hidden", clear: "both" }}>
-        <ANDis
-          onChangeClientList={handleClientListState}
-          listOfAndis={andiList}
-        />
-      </div>
       {listOfWorkSource &&
         listOfWorkSource.map((workSource) => {
-          console.log(workSource);
           return (
-            <div style={{ overflow: "hidden", clear: "both" }}>
+            <div>
               <WorkSource
-                workSourceList={andiList}
+                onChangeClientList={handleClientListState}
+                andiList={andiList}
                 nameOfWorkSource={workSource}
               />
             </div>

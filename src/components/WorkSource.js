@@ -1,8 +1,9 @@
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "./ItemTypes.js";
+import { Box } from "./Box.js";
 
 const style = {
-  height: "12rem",
+  height: "100vh",
   width: "12rem",
   marginRight: "1.5rem",
   marginBottom: "1.5rem",
@@ -12,8 +13,13 @@ const style = {
   fontSize: "1rem",
   lineHeight: "normal",
   float: "left",
+  display: "block",
 };
-export const WorkSource = ({ workSourceList, nameOfWorkSource }) => {
+export const WorkSource = ({
+  andiList,
+  nameOfWorkSource,
+  onChangeClientList,
+}) => {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: () => ({ name: nameOfWorkSource }),
@@ -36,18 +42,70 @@ export const WorkSource = ({ workSourceList, nameOfWorkSource }) => {
       style={{ ...style, backgroundColor }}
       data-testid={nameOfWorkSource}
     >
-      {nameOfWorkSource}
-      {workSourceList ? (
-        workSourceList.map((ANDi) => {
-          console.log("line 44", ANDi.currentProject, nameOfWorkSource);
-          if (ANDi.currentProject === nameOfWorkSource) {
-            console.log("triggered if statement");
-            return <p>{ANDi.name}</p>;
-          }
-        })
-      ) : (
-        <p>not updated in time</p>
-      )}
+      <div>
+        <p>{nameOfWorkSource}</p>
+        {andiList &&
+          andiList.map((andi) => {
+            if (andi.client) {
+              console.log(andi);
+              console.log(andi.client);
+              console.log(andi.client.status === "tipped");
+              console.log(nameOfWorkSource === andi.client.name);
+            }
+            const isTippedForClient =
+              andi.client &&
+              andi.client.status === "tipped" &&
+              nameOfWorkSource === andi.client.name;
+
+            const isRollingOff =
+              andi.client &&
+              andi.client.status === "rolling off" &&
+              nameOfWorkSource === "Lab";
+
+            if (andi.currentProject === nameOfWorkSource) {
+              return (
+                <Box
+                  andi={andi}
+                  onChangeClientList={onChangeClientList}
+                  worksource={nameOfWorkSource}
+                  isTipped={isTippedForClient}
+                  isRollingOff={isRollingOff}
+                />
+              );
+            }
+          })}
+      </div>
+      {/* <div>
+        {andiList &&
+          andiList.map((andi) => {
+            if (andi.client) {
+              console.log("line 64", andi.client.name);
+            }
+            const isTippedForClient =
+              andi.client &&
+              andi.client.status === "tipped" &&
+              nameOfWorkSource === andi.client.name;
+
+            const isRollingOff =
+              andi.client &&
+              andi.client.status === "rolling off" &&
+              nameOfWorkSource === "Lab";
+
+            console.log(andi.name, isTippedForClient, isRollingOff);
+
+            {
+              return (
+                <Box
+                  andi={andi}
+                  onChangeClientList={onChangeClientList}
+                  worksource={nameOfWorkSource}
+                  isTipped={isTippedForClient}
+                  isRollingOff={isRollingOff}
+                />
+              );
+            }
+          })}
+      </div> */}
     </div>
   );
 };

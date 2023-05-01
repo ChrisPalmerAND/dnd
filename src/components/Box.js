@@ -1,25 +1,44 @@
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "./ItemTypes.js";
+import StarIcon from "@mui/icons-material/Star";
+import Icon from "@mui/material/Icon";
+import LogoutIcon from "@mui/icons-material/Logout";
+
 const style = {
+  display: "block",
   border: "1px dashed gray",
   backgroundColor: "white",
-  padding: "0.5rem 1rem",
-  marginRight: "1.5rem",
   marginBottom: "1.5rem",
   cursor: "move",
   float: "left",
   color: "black",
+  width: "100%",
 };
-export const Box = function Box({ name, onChangeClientList }) {
+const shadowStyle = {
+  border: "1px dashed white",
+  backgroundColor: "black",
+
+  marginBottom: "1.5rem",
+  cursor: "move",
+  float: "left",
+  color: "white",
+  width: "100%",
+};
+export const Box = function Box({
+  andi,
+  onChangeClientList,
+  worksource,
+  isTipped,
+  isRollingOff,
+}) {
+  const name = andi.name;
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.BOX,
     item: { name },
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
       if (item) {
-        console.log(`You dropped ${item.name} into ${dropResult.name}!`);
         onChangeClientList(item.name, dropResult.name);
-        // should change this to pass in the item name and the drop result name
       }
     },
     collect: (monitor) => ({
@@ -28,9 +47,24 @@ export const Box = function Box({ name, onChangeClientList }) {
     }),
   }));
   const opacity = isDragging ? 0.4 : 1;
+
   return (
-    <div ref={drag} style={{ ...style, opacity }} data-testid={`box`}>
-      {name}
-    </div>
+    <>
+      <div
+        ref={isTipped || isRollingOff ? null : drag}
+        style={
+          isTipped || isRollingOff
+            ? { ...shadowStyle, opacity }
+            : { ...style, opacity }
+        }
+        data-testid={`box`}
+      >
+        {name}
+
+        {isTipped && worksource === "Lab" && <StarIcon />}
+
+        {isRollingOff && worksource === andi.client.name && <LogoutIcon />}
+      </div>
+    </>
   );
 };
