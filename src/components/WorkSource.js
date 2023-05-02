@@ -15,14 +15,10 @@ const style = {
   float: "left",
   display: "block",
 };
-export const WorkSource = ({
-  andiList,
-  nameOfWorkSource,
-  onChangeClientList,
-}) => {
+export const WorkSource = ({ andiList, workSource, onChangeClientList }) => {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
-    drop: () => ({ name: nameOfWorkSource }),
+    drop: () => ({ name: workSource.workSourceId }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
@@ -40,10 +36,10 @@ export const WorkSource = ({
     <div
       ref={drop}
       style={{ ...style, backgroundColor }}
-      data-testid={nameOfWorkSource}
+      data-testid={workSource.workSourceName}
     >
       <div>
-        <p>{nameOfWorkSource}</p>
+        <p>{workSource.workSourceName}</p>
         {andiList &&
           andiList.map((andi) => {
             const isTippedForClient =
@@ -52,13 +48,12 @@ export const WorkSource = ({
             const isRollingOff =
               andi.client && andi.client.status === "rolling off";
 
-            console.log("line 55", andi.currentProject, nameOfWorkSource);
-            if (andi.currentProject === nameOfWorkSource) {
+            if (andi.currentProject === workSource.workSourceId) {
               return (
                 <Box
                   andi={andi}
                   onChangeClientList={onChangeClientList}
-                  worksource={nameOfWorkSource}
+                  worksource={workSource}
                   isTipped={isTippedForClient}
                   isRollingOff={isRollingOff}
                 />
@@ -76,9 +71,9 @@ export const WorkSource = ({
               andi.client && andi.client.status === "rolling off";
 
             const isShadowBox =
-              isTippedForClient && nameOfWorkSource === andi.client?.name
+              isTippedForClient && workSource.workSourceId === andi.client?.id
                 ? true
-                : isRollingOff && nameOfWorkSource === "Lab"
+                : isRollingOff && workSource.workSourceId === 1
                 ? true
                 : false;
 
@@ -86,7 +81,7 @@ export const WorkSource = ({
               <Box
                 andi={andi}
                 onChangeClientList={onChangeClientList}
-                worksource={nameOfWorkSource}
+                worksource={workSource}
                 isShadowBox={isShadowBox}
               />
             ) : (

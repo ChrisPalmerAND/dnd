@@ -38,6 +38,7 @@ export const Box = function Box({
     item: { name },
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
+      console.log(item.name, dropResult);
       if (item) {
         onChangeClientList(item.name, dropResult.name);
       }
@@ -59,10 +60,10 @@ export const Box = function Box({
         data-testid={`box`}
       >
         {name}
-
-        {isTipped && worksource === "Lab" && <StarIcon />}
-
-        {isRollingOff && worksource === andi.client.name && <LogoutIcon />}
+        {isTipped && worksource.workSourceId === 1 && <StarIcon />}
+        {isRollingOff && worksource.workSourceId === andi.client.id && (
+          <LogoutIcon />
+        )}
       </div>
     </>
   );

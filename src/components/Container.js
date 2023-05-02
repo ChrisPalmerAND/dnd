@@ -1,36 +1,43 @@
 import { memo, useState } from "react";
-import { ANDis } from "./ANDis.js";
+import { ANDi } from "./ANDis.js";
 import { WorkSource } from "./WorkSource.js";
 export const Container = memo(function Container() {
-  const [clientList, setClientList] = useState([]);
   const [andiList, setAndiList] = useState([
     {
       name: "Chris",
       id: 1,
-      currentProject: "Lab",
-      client: { status: "tipped", name: "M&M" },
+      currentProject: 1,
+      client: { status: "tipped", name: "M&M", id: 4 },
     },
     {
       name: "Dom",
       id: 2,
-      currentProject: "Sky",
-      client: { status: "confirmed", name: "Sky" },
-    }, // change "tipped" for enum types.
+      currentProject: 3,
+      client: { status: "confirmed", name: "Sky", id: 3 },
+    },
     {
       name: "KZ",
       id: 3,
-      currentProject: "TCO",
-      client: { status: "rolling off", name: "TCO" },
+      currentProject: 2,
+      client: { status: "rolling off", name: "TCO", id: 2 },
     },
     {
       name: "Iain",
       id: 4,
-      currentProject: "Lab",
-      client: null,
+      currentProject: 1,
+      client: { id: 1 },
     },
   ]);
 
+  const listOfWorkSource = [
+    { workSourceName: "Lab", workSourceId: 1 },
+    { workSourceName: "TCO", workSourceId: 2 },
+    { workSourceName: "Sky", workSourceId: 3 },
+    { workSourceName: "M&M", workSourceId: 4 },
+  ];
+
   const handleClientListState = (client, targetName) => {
+    console.log(targetName);
     setAndiList((prev) =>
       prev.map((andi) => {
         if (andi.name === client) {
@@ -41,8 +48,6 @@ export const Container = memo(function Container() {
     );
   };
 
-  const listOfWorkSource = ["Lab", "Sky", "TCO", "M&M"];
-
   return (
     <div>
       {listOfWorkSource &&
@@ -52,7 +57,7 @@ export const Container = memo(function Container() {
               <WorkSource
                 onChangeClientList={handleClientListState}
                 andiList={andiList}
-                nameOfWorkSource={workSource}
+                workSource={workSource}
               />
             </div>
           );
