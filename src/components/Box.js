@@ -24,6 +24,7 @@ const shadowStyle = {
   color: "white",
   width: "100%",
 };
+
 export const Box = function Box({
   andi,
   onChangeClientList,
@@ -31,6 +32,7 @@ export const Box = function Box({
   isTipped,
   isRollingOff,
   isShadowBox,
+  toggleDrawer,
 }) {
   const name = andi.name;
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -58,6 +60,7 @@ export const Box = function Box({
           isShadowBox ? { ...shadowStyle, opacity } : { ...style, opacity }
         }
         data-testid={`box`}
+        onClick={!isShadowBox ? () => toggleDrawer(true, andi) : undefined}
       >
         {name}
         {isTipped && worksource.workSourceId === 1 && <StarIcon />}

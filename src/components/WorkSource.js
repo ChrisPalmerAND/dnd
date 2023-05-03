@@ -1,6 +1,7 @@
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "./ItemTypes.js";
 import { Box } from "./Box.js";
+import { ClientStatusType } from "./ClientStatusType.js";
 
 const style = {
   height: "100vh",
@@ -15,7 +16,37 @@ const style = {
   float: "left",
   display: "block",
 };
-export const WorkSource = ({ andiList, workSource, onChangeClientList }) => {
+
+const transformTime = (date) => {
+  let splitDate = date.split("/");
+  splitDate.reverse();
+
+  const formattedDate = splitDate.join("-");
+
+  var d = new Date(Date.parse(formattedDate));
+  console.log(
+    "day",
+    d.getDate() + "month" + (d.getMonth() + 1) + "year" + d.getFullYear()
+  );
+  return Date.parse(formattedDate);
+};
+
+const dateWithinLabThreshold = (endDate) => {
+  const endDateTimeStamp = transformTime(endDate);
+  const dateToday = new Date();
+  let withinlabThresholdDate = new Date();
+  withinlabThresholdDate.setDate(dateToday.getDate() + 14);
+  const withinLabThresholdDateTimeStamp = Date.parse(withinlabThresholdDate);
+  console.log(withinLabThresholdDateTimeStamp > endDateTimeStamp);
+  return withinLabThresholdDateTimeStamp > endDateTimeStamp;
+};
+
+export const WorkSource = ({
+  andiList,
+  workSource,
+  onChangeClientList,
+  toggleDrawer,
+}) => {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: () => ({ name: workSource.workSourceId }),
@@ -43,10 +74,11 @@ export const WorkSource = ({ andiList, workSource, onChangeClientList }) => {
         {andiList &&
           andiList.map((andi) => {
             const isTippedForClient =
-              andi.client && andi.client.status === "tipped";
+              andi.client && andi.client.status === ClientStatusType.TIPPED;
 
             const isRollingOff =
-              andi.client && andi.client.status === "rolling off";
+              andi.client &&
+              andi.client.status === ClientStatusType.ROLLING_OFF;
 
             if (andi.currentProject === workSource.workSourceId) {
               return (
@@ -56,6 +88,7 @@ export const WorkSource = ({ andiList, workSource, onChangeClientList }) => {
                   worksource={workSource}
                   isTipped={isTippedForClient}
                   isRollingOff={isRollingOff}
+                  toggleDrawer={toggleDrawer}
                 />
               );
             }
@@ -65,27 +98,31 @@ export const WorkSource = ({ andiList, workSource, onChangeClientList }) => {
         {andiList &&
           andiList.map((andi) => {
             const isTippedForClient =
-              andi.client && andi.client.status === "tipped";
+              andi.client && andi.client.status === ClientStatusType.TIPPED;
 
             const isRollingOff =
-              andi.client && andi.client.status === "rolling off";
+              andi.client &&
+              andi.client.status === ClientStatusType.ROLLING_OFF;
 
             const isShadowBox =
               isTippedForClient && workSource.workSourceId === andi.client?.id
                 ? true
-                : isRollingOff && workSource.workSourceId === 1
+                : isRollingOff &&
+                  dateWithinLabThreshold(andi.client.endDate) &&
+                  workSource.workSourceId === 1
                 ? true
                 : false;
 
-            return isShadowBox ? (
-              <Box
-                andi={andi}
-                onChangeClientList={onChangeClientList}
-                worksource={workSource}
-                isShadowBox={isShadowBox}
-              />
-            ) : (
-              ""
+            return (
+              isShadowBox && (
+                <Box
+                  andi={andi}
+                  onChangeClientList={onChangeClientList}
+                  worksource={workSource}
+                  isShadowBox={isShadowBox}
+                  toggleDrawer={toggleDrawer}
+                />
+              )
             );
           })}
       </div>
