@@ -1,27 +1,24 @@
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "./ItemTypes.js";
 import StarIcon from "@mui/icons-material/Star";
-import Icon from "@mui/material/Icon";
 import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
 
 const style = {
   display: "block",
   border: "1px dashed gray",
-  backgroundColor: "white",
-  marginBottom: "1.5rem",
-  cursor: "move",
-  float: "left",
-  color: "black",
-  width: "100%",
-};
-const shadowStyle = {
-  border: "1px dashed white",
-  backgroundColor: "black",
-
+  backgroundColor: "rgb(60, 126, 242)",
   marginBottom: "1.5rem",
   cursor: "move",
   float: "left",
   color: "white",
+  width: "100%",
+};
+const shadowStyle = {
+  backgroundColor: "lightgrey",
+  marginBottom: "1.5rem",
+  float: "left",
+  color: "black",
   width: "100%",
 };
 
@@ -41,7 +38,7 @@ export const Box = function Box({
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
       console.log(item.name, dropResult);
-      if (item) {
+      if (item && dropResult) {
         onChangeClientList(item.name, dropResult.name);
       }
     },
@@ -62,8 +59,9 @@ export const Box = function Box({
         data-testid={`box`}
         onClick={!isShadowBox ? () => toggleDrawer(true, andi) : undefined}
       >
+        {isShadowBox && <LoginIcon />}
         {name}
-        {isTipped && worksource.workSourceId === 1 && <StarIcon />}
+        {isTipped && worksource.workSourceId === 1 && <LogoutIcon />}
         {isRollingOff && worksource.workSourceId === andi.client.id && (
           <LogoutIcon />
         )}

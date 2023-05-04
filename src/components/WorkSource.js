@@ -2,43 +2,22 @@ import { useDrop } from "react-dnd";
 import { ItemTypes } from "./ItemTypes.js";
 import { Box } from "./Box.js";
 import { ClientStatusType } from "./ClientStatusType.js";
+import { dateWithinLabThreshold } from "../utils/dateWithinLabThreshold.js";
 
 const style = {
-  height: "100vh",
+  minHeight: "50vh",
   width: "12rem",
   marginRight: "1.5rem",
   marginBottom: "1.5rem",
-  color: "white",
+  color: "black",
   padding: "1rem",
   textAlign: "center",
   fontSize: "1rem",
   lineHeight: "normal",
   float: "left",
   display: "block",
-};
-
-const transformTime = (date) => {
-  let splitDate = date.split("/");
-  splitDate.reverse();
-
-  const formattedDate = splitDate.join("-");
-
-  var d = new Date(Date.parse(formattedDate));
-  console.log(
-    "day",
-    d.getDate() + "month" + (d.getMonth() + 1) + "year" + d.getFullYear()
-  );
-  return Date.parse(formattedDate);
-};
-
-const dateWithinLabThreshold = (endDate) => {
-  const endDateTimeStamp = transformTime(endDate);
-  const dateToday = new Date();
-  let withinlabThresholdDate = new Date();
-  withinlabThresholdDate.setDate(dateToday.getDate() + 14);
-  const withinLabThresholdDateTimeStamp = Date.parse(withinlabThresholdDate);
-  console.log(withinLabThresholdDateTimeStamp > endDateTimeStamp);
-  return withinLabThresholdDateTimeStamp > endDateTimeStamp;
+  "box-shadow":
+    "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
 };
 
 export const WorkSource = ({
@@ -56,11 +35,12 @@ export const WorkSource = ({
     }),
   }));
   const isActive = canDrop && isOver;
-  let backgroundColor = "#222";
+
+  let backgroundColor = "white";
   if (isActive) {
-    backgroundColor = "darkgreen";
+    backgroundColor = "white";
   } else if (canDrop) {
-    backgroundColor = "darkkhaki";
+    backgroundColor = "grey";
   }
 
   return (
@@ -70,7 +50,9 @@ export const WorkSource = ({
       data-testid={workSource.workSourceName}
     >
       <div>
-        <p>{workSource.workSourceName}</p>
+        <h3>
+          <strong>{workSource.workSourceName}</strong>
+        </h3>
         {andiList &&
           andiList.map((andi) => {
             const isTippedForClient =

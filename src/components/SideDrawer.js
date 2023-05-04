@@ -2,6 +2,8 @@ import { ClientStatusType } from "./ClientStatusType";
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import { Backdrop, backdropClasses } from "@mui/material";
+import { listOfWorkSource } from "../data/worksource";
+import { WorkSourceNames } from "./workSourceNames";
 
 export const SideDrawer = ({
   currentAndiDetails,
@@ -9,6 +11,27 @@ export const SideDrawer = ({
   toggleDrawer,
 }) => {
   const anchor = "right";
+
+  const currentProjectDetails =
+    currentAndiDetails &&
+    listOfWorkSource.find(
+      (workSource) =>
+        workSource.workSourceId === currentAndiDetails.currentProject
+    );
+
+  const individualStartDate =
+    currentAndiDetails && currentAndiDetails.client.startDate;
+
+  const individualEndDate =
+    currentAndiDetails && currentAndiDetails.client.endDate;
+
+  const startDate = individualStartDate
+    ? currentAndiDetails.client.startDate
+    : currentAndiDetails && currentProjectDetails.workSourceStartDate;
+
+  const endDate = individualEndDate
+    ? currentAndiDetails.client.endDate
+    : currentAndiDetails && currentProjectDetails.workSourceEndDate;
 
   return (
     <Drawer
@@ -25,24 +48,22 @@ export const SideDrawer = ({
           <p>Role: {currentAndiDetails.profile.role}</p>
           <p>Skills: </p>
           <ul>
-            {currentAndiDetails &&
-              currentAndiDetails.profile.skills.map((skill) => (
-                <li>{skill}</li>
-              ))}
+            {currentAndiDetails.profile.skills.map((skill) => (
+              <li>{skill}</li>
+            ))}
           </ul>
           <hr />
-          {currentAndiDetails.client.skills &&
-            currentAndiDetails.client.ClientStatusType !==
-              ClientStatusType.ROLLING_OFF && (
+          {currentAndiDetails.client &&
+            currentAndiDetails.client.name != WorkSourceNames.LAB && (
               <>
                 <h2>{currentAndiDetails.client.name}</h2>
                 <p>Status: {currentAndiDetails.client.status}</p>
-                <p>Start Date: {currentAndiDetails.client.endDate}</p>
-                <p>End Date: {currentAndiDetails.client.endDate}</p>
+                <p>Start Date: {startDate}</p>
+                <p>End Date: {endDate}</p>
                 <p>Role: {currentAndiDetails.client.role}</p>
                 <p>Skills: </p>
                 <ul>
-                  {currentAndiDetails &&
+                  {currentAndiDetails.client.skills &&
                     currentAndiDetails.client.skills.map((skill) => (
                       <li>{skill}</li>
                     ))}

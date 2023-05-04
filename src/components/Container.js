@@ -1,91 +1,12 @@
 import { memo, useState } from "react";
 import { WorkSource } from "./WorkSource.js";
-import { WorkSourceNames } from "./workSourceNames.js";
-import { ClientStatusType } from "./ClientStatusType.js";
-
 import { SideDrawer } from "./SideDrawer.js";
+import { andis } from "../data/andis.js";
+import { listOfWorkSource } from "../data/worksource.js";
+import { ClientStatusType } from "./ClientStatusType.js";
 export const Container = memo(function Container() {
-  const [andiList, setAndiList] = useState([
-    {
-      name: "Chris",
-      profile: {
-        level: 2.2,
-        role: "Developer",
-        skills: ["python", "react"],
-      },
-      id: 1,
-      currentProject: 1,
-      client: {
-        startDate: "05/05/2023",
-        endDate: "05/10/2023",
-        status: ClientStatusType.TIPPED,
-        name: WorkSourceNames.MM,
-        id: 4,
-        role: "Developer",
-        skills: ["python"],
-      },
-    },
-    {
-      name: "Dom",
-      id: 2,
-      currentProject: 3,
-      profile: {
-        level: 3.1,
-        role: "Developer",
-        skills: ["java", "react"],
-      },
-      client: {
-        startDate: "03/05/2023",
-        endDate: "03/08/2023",
-        status: ClientStatusType.CONFIRMED,
-        name: WorkSourceNames.SKY,
-        id: 3,
-        role: "Developer",
-        skills: ["java"],
-      },
-    },
-    {
-      name: "KZ",
-      id: 3,
-      currentProject: 2,
-      profile: {
-        level: 2.2,
-        role: "Developer",
-        skills: ["java", "react"],
-      },
-      client: {
-        startDate: "03/05/2023",
-        endDate: "03/05/2023",
-        status: ClientStatusType.ROLLING_OFF,
-        name: WorkSourceNames.TCO,
-        id: 2,
-        role: "Developer",
-        skills: ["react"],
-      },
-    },
-    {
-      name: "Iain",
-      id: 4,
-      currentProject: 1,
-      profile: {
-        level: 5.2,
-        role: "Developer",
-        skills: ["java", "react"],
-      },
-      client: {
-        startDate: null,
-        startDate: null,
-        status: null,
-        name: null,
-        id: null,
-        role: null,
-        skills: null,
-      },
-    },
-  ]);
-
+  const [andiList, setAndiList] = useState(andis);
   const [currentAndiDetails, setCurrentAndiDetails] = useState();
-
   const [drawerState, setDrawerState] = useState({
     right: false,
   });
@@ -94,25 +15,34 @@ export const Container = memo(function Container() {
     handleCurrentAndiDetails(currentAndiDetails);
     setDrawerState({ ...drawerState, right: open });
   };
-
-  const listOfWorkSource = [
-    { workSourceName: WorkSourceNames.LAB, workSourceId: 1 },
-    { workSourceName: WorkSourceNames.TCO, workSourceId: 2 },
-    { workSourceName: WorkSourceNames.SKY, workSourceId: 3 },
-    { workSourceName: WorkSourceNames.MM, workSourceId: 4 },
-  ];
-
   const handleCurrentAndiDetails = (andi) => {
     setCurrentAndiDetails(andi);
   };
 
-  const handleClientListState = (client, targetName) => {
-    console.log(targetName);
+  const newClientReset = (andi) => {
+    andi.client.startDate = null;
+    andi.client.endDate = null;
+    andi.client.role = null;
+    andi.client.skills = null;
+    return andi;
+  };
+  const handleClientListState = (client, targetId) => {
     setAndiList((prev) =>
       prev.map((andi) => {
         if (andi.name === client) {
-          andi.currentProject = targetName;
+          andi.currentProject = targetId;
+          andi.client.id = targetId;
+          andi.client.status = ClientStatusType.CONFIRMED;
+          console.log(targetId);
+
+          const newWorkSource = listOfWorkSource.filter(
+            (workSource) => workSource.workSourceId === targetId
+          );
+          console.log("new worksource", newWorkSource);
+          andi.client.name = newWorkSource[0].workSourceName;
+          andi = newClientReset(andi);
         }
+        console.log(andi);
         return andi;
       })
     );
